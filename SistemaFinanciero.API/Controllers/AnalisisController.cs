@@ -18,8 +18,37 @@ namespace SistemaFinanciero.API.Controllers
 
         // Endpoint único que devuelve TODOS los análisis
         [HttpPost("completo")]
-        public ActionResult<ResultadoAnalisisCompleto> Calcular([FromBody] AnalisisMultiPeriodoDTO d)
+        public async Task<ActionResult<ResultadoAnalisisCompleto>> Calcular([FromBody] AnalisisMultiPeriodoDTO d)
         {
+            // Model binding sometimes fails depending on Content-Type or client behavior.
+            // If binding produced null or missing periods, try to read and deserialize the raw body
+            if (d == null || d.PeriodoActual == null || d.PeriodoAnterior == null)
+            {
+                try
+                {
+                    Request.Body.Position = 0;
+                }
+                catch { }
+
+                using var reader = new System.IO.StreamReader(Request.Body);
+                var raw = await reader.ReadToEndAsync();
+                if (!string.IsNullOrWhiteSpace(raw))
+                {
+                    try
+                    {
+                        var opts = new System.Text.Json.JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        };
+                        d = System.Text.Json.JsonSerializer.Deserialize<AnalisisMultiPeriodoDTO>(raw, opts);
+                    }
+                    catch
+                    {
+                        // ignore and return error below
+                    }
+                }
+            }
+
             if (d == null || d.PeriodoActual == null || d.PeriodoAnterior == null)
             {
                 return BadRequest("Faltan datos del período actual o anterior.");
@@ -49,6 +78,15 @@ namespace SistemaFinanciero.API.Controllers
             catch { }
 
             return Ok(resultado);
+        }
+
+        // Debug endpoint: devuelve el body tal como llegó (útil para ver el JSON recibido)
+        [HttpPost("completo-debug")]
+        public async Task<IActionResult> CalcularDebug()
+        {
+            using var reader = new System.IO.StreamReader(Request.Body);
+            var body = await reader.ReadToEndAsync();
+            return Ok(new { received = body });
         }
     }
 }

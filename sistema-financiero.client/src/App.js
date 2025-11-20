@@ -58,10 +58,28 @@ const App = () => {
       };
 
       const response = await calcularAnalisisCompleto(payload);
-      setResultados(response.data);
+      // Normalize keys: backend may return PascalCase or camelCase depending on serialization.
+      const normalizeKeysToCamel = (obj) => {
+        if (obj === null || obj === undefined) return obj;
+        if (Array.isArray(obj)) return obj.map(normalizeKeysToCamel);
+        if (typeof obj === 'object') {
+          const out = {};
+          Object.keys(obj).forEach((k) => {
+            const camel = k.charAt(0).toLowerCase() + k.slice(1);
+            out[camel] = normalizeKeysToCamel(obj[k]);
+          });
+          return out;
+        }
+        return obj;
+      };
+
+      const normalized = normalizeKeysToCamel(response.data);
+      setResultados(normalized);
     } catch (err) {
       console.error(err);
-      setError("Error al conectar con el servidor. Verifique que la API (.NET) esté corriendo en el puerto 7237.");
+      // Use configured API URL in the error message so it's consistent with apiService
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5272/api';
+      setError(`Error al conectar con el servidor. Verifique que la API (.NET) esté corriendo y accesible en ${apiUrl}`);
     } finally {
       setLoading(false);
     }
