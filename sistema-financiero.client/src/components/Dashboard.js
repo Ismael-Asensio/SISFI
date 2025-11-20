@@ -7,18 +7,27 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const Dashboard = ({ datos }) => {
   if (!datos) return null;
 
-  const safe = (v) => (v ?? 0);
-  const safePct = (v) => Number(safe(v)).toFixed(2);
-  const safeNum = (v) => Number(safe(v)).toFixed(2);
+  const toNumber = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const fmtNum = (v, decimals = 2) => toNumber(v).toFixed(decimals);
+  const fmtPct = (v, decimals = 2) => `${toNumber(v).toFixed(decimals)}%`;
+
+  const margen = toNumber(datos.margenUtilidad) * 100;
+  const rotacion = toNumber(datos.rotacionActivos);
+  const apalancamiento = toNumber(datos.apalancamientoFinanciero);
+  const roe = toNumber(datos.roe) * 100;
 
   const chartData = {
     labels: ['Margen Utilidad', 'Rotación Activos', 'Apalancamiento'],
     datasets: [
       {
         data: [
-          Number(safe(datos.margenUtilidad)),
-          Number(safe(datos.rotacionActivos)),
-          Number(safe(datos.apalancamientoFinanciero))
+          margen,
+          rotacion,
+          apalancamiento
         ],
         backgroundColor: [
           'rgba(37, 99, 235, 0.8)', // Azul
@@ -38,11 +47,11 @@ const Dashboard = ({ datos }) => {
           <Doughnut data={chartData} options={{ maintainAspectRatio: false }} />
         </div>
         <div>
-          <p><strong>ROE Total:</strong> <span style={{ fontSize: '1.5em', color: '#2563eb' }}>{safePct(datos.roe)}%</span></p>
+          <p><strong>ROE Total:</strong> <span style={{ fontSize: '1.5em', color: '#2563eb' }}>{fmtPct(roe)}</span></p>
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li>🔹 Margen: {safePct(datos.margenUtilidad)}%</li>
-            <li>🔹 Rotación: {safeNum(datos.rotacionActivos)}x</li>
-            <li>🔹 Apalancamiento: {safeNum(datos.apalancamientoFinanciero)}</li>
+            <li>🔹 Margen: {fmtPct(margen)}</li>
+            <li>🔹 Rotación: {fmtNum(rotacion)}x</li>
+            <li>🔹 Apalancamiento: {fmtNum(apalancamiento)}</li>
           </ul>
         </div>
       </div>
