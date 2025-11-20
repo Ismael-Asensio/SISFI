@@ -1,13 +1,12 @@
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5272/api';
+import axios from 'axios';
 
-export async function postAnalisis(body) {
-  const res = await fetch(`${API_BASE}/analisis/completo`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) throw new Error('API request failed: ' + res.status);
-  return res.json();
-}
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-export default { postAnalisis };
+const apiClient = axios.create({
+  baseURL: API_BASE,
+  headers: { 'Content-Type': 'application/json' }
+});
+
+export const calcularAnalisisCompleto = (datos) => apiClient.post('/analisis/completo', datos);
+
+export default apiClient;
