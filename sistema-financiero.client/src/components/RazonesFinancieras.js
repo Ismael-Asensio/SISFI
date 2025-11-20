@@ -3,9 +3,13 @@ import React from 'react';
 const RazonesFinancieras = ({ datos }) => {
   if (!datos) return null;
 
-  const safe = (v) => (v ?? 0);
-  const fmtPct = (val) => `${Number(safe(val)).toFixed(2)}%`;
-  const fmtNum = (val) => Number(safe(val)).toFixed(2);
+  const toNumber = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const fmtNum = (val, decimals = 2) => toNumber(val).toFixed(decimals);
+  const fmtPct = (val, decimals = 2) => `${toNumber(val * 100).toFixed(decimals)}%`;
 
   return (
     <div className="card">
