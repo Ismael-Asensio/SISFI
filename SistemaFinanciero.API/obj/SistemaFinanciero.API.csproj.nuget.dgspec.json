@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj": {}
+    "C:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj": {}
   },
   "projects": {
-    "c:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj": {
+    "C:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj",
+        "projectUniqueName": "C:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj",
         "projectName": "SistemaFinanciero.API",
-        "projectPath": "c:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj",
+        "projectPath": "C:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj",
         "packagesPath": "C:\\Users\\ismaa\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\obj\\",
+        "outputPath": "C:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -34,3 +34,4 @@ C:\Users\ismaa\OneDrive\Escritorio\ProyectoFinancieroMIPYMES\SistemaFinanciero.A
 C:\Users\ismaa\OneDrive\Escritorio\ProyectoFinancieroMIPYMES\SistemaFinanciero.API\obj\Debug\net8.0\SistemaFinanciero.API.pdb
 C:\Users\ismaa\OneDrive\Escritorio\ProyectoFinancieroMIPYMES\SistemaFinanciero.API\obj\Debug\net8.0\SistemaFinanciero.API.genruntimeconfig.cache
 C:\Users\ismaa\OneDrive\Escritorio\ProyectoFinancieroMIPYMES\SistemaFinanciero.API\obj\Debug\net8.0\ref\SistemaFinanciero.API.dll
+C:\Users\ismaa\OneDrive\Escritorio\ProyectoFinancieroMIPYMES\SistemaFinanciero.API\obj\Debug\net8.0\SistemaFinanciero.API.sourcelink.json

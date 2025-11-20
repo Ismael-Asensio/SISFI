@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xetBB5BMxTY=",
+  "dgSpecHash": "pUYGstBSTOY=",
   "success": true,
-  "projectFilePath": "c:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj",
+  "projectFilePath": "C:\\Users\\ismaa\\OneDrive\\Escritorio\\ProyectoFinancieroMIPYMES\\SistemaFinanciero.API\\SistemaFinanciero.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ismaa\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.3.0\\microsoft.aspnetcore.cors.2.3.0.nupkg.sha512",
     "C:\\Users\\ismaa\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.0\\microsoft.aspnetcore.http.abstractions.2.3.0.nupkg.sha512",

@@ -1,4 +1,0 @@
-{
-  "PeriodoActual": { "Ventas": 100, "UtilidadNeta": 400, "Depreciacion": 12, "Efectivo": 900, "CuentasPorCobrar": 1000, "Inventario": 12, "ActivoCorriente": 12, "CuentasPorPagar": 12, "PasivoCorriente": 2300, "ActivoTotal": 12000, "PasivoTotal": 130000, "Patrimonio": 890000 },
-  "PeriodoAnterior": { "Ventas": 200, "UtilidadNeta": 200, "Depreciacion": 32, "Efectivo": 20, "CuentasPorCobrar": 90000, "Inventario": 12, "ActivoCorriente": 23, "CuentasPorPagar": 12, "PasivoCorriente": 500, "ActivoTotal": 300, "PasivoTotal": 1290, "Patrimonio": 20000 }
-}
