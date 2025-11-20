@@ -18,48 +18,113 @@ namespace SistemaFinanciero.API.Controllers
 
         // Endpoint único que devuelve TODOS los análisis
         [HttpPost("completo")]
-        public async Task<ActionResult<ResultadoAnalisisCompleto>> Calcular([FromBody] AnalisisMultiPeriodoDTO d)
+        public async Task<ActionResult<ResultadoAnalisisCompleto>> Calcular()
         {
-            // Model binding sometimes fails depending on Content-Type or client behavior.
-            // If binding produced null or missing periods, try to read and deserialize the raw body
-            if (d == null || d.PeriodoActual == null || d.PeriodoAnterior == null)
+            // Read the raw request body and parse it ourselves (avoid model-binding consuming the stream)
+            try { Request.EnableBuffering(); } catch { }
+            string rawBody;
+            using (var reader = new System.IO.StreamReader(Request.Body, System.Text.Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: 1024, leaveOpen: true))
             {
-                try
-                {
-                    Request.Body.Position = 0;
-                }
-                catch { }
+                rawBody = await reader.ReadToEndAsync();
+                Request.Body.Position = 0;
+            }
 
-                using var reader = new System.IO.StreamReader(Request.Body);
-                var raw = await reader.ReadToEndAsync();
-                if (!string.IsNullOrWhiteSpace(raw))
+            if (string.IsNullOrWhiteSpace(rawBody))
+            {
+                return BadRequest("Faltan datos del período actual o anterior (body vacío).");
+            }
+
+            AnalisisMultiPeriodoDTO parsed = null;
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(rawBody);
+                var root = doc.RootElement;
+
+                bool TryGetProp(System.Text.Json.JsonElement el, string name, out System.Text.Json.JsonElement found)
                 {
-                    try
+                    foreach (var p in el.EnumerateObject())
                     {
-                        var opts = new System.Text.Json.JsonSerializerOptions
+                        if (string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase))
                         {
-                            PropertyNameCaseInsensitive = true
-                        };
-                        d = System.Text.Json.JsonSerializer.Deserialize<AnalisisMultiPeriodoDTO>(raw, opts);
+                            found = p.Value;
+                            return true;
+                        }
                     }
-                    catch
-                    {
-                        // ignore and return error below
-                    }
+                    found = default;
+                    return false;
                 }
+
+                decimal ReadDecimal(System.Text.Json.JsonElement parent, string name)
+                {
+                    if (TryGetProp(parent, name, out var v))
+                    {
+                        try
+                        {
+                            if (v.ValueKind == System.Text.Json.JsonValueKind.Number)
+                            {
+                                try { return v.GetDecimal(); }
+                                catch
+                                {
+                                    try { return Convert.ToDecimal(v.GetDouble()); } catch { return 0m; }
+                                }
+                            }
+                            if (v.ValueKind == System.Text.Json.JsonValueKind.String)
+                            {
+                                if (decimal.TryParse(v.GetString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var r))
+                                    return r;
+                            }
+                        }
+                        catch { }
+                    }
+                    return 0m;
+                }
+
+                DatosPeriodoDTO ReadPeriodo(System.Text.Json.JsonElement rootEl, string periodoName)
+                {
+                    var pDto = new DatosPeriodoDTO();
+                    if (TryGetProp(rootEl, periodoName, out var pEl))
+                    {
+                        pDto.Ventas = ReadDecimal(pEl, "ventas");
+                        pDto.UtilidadNeta = ReadDecimal(pEl, "utilidadNeta");
+                        pDto.Depreciacion = ReadDecimal(pEl, "depreciacion");
+                        pDto.Efectivo = ReadDecimal(pEl, "efectivo");
+                        pDto.CuentasPorCobrar = ReadDecimal(pEl, "cuentasPorCobrar");
+                        pDto.Inventario = ReadDecimal(pEl, "inventario");
+                        pDto.ActivoCorriente = ReadDecimal(pEl, "activoCorriente");
+                        pDto.CuentasPorPagar = ReadDecimal(pEl, "cuentasPorPagar");
+                        pDto.PasivoCorriente = ReadDecimal(pEl, "pasivoCorriente");
+                        pDto.ActivoTotal = ReadDecimal(pEl, "activoTotal");
+                        pDto.PasivoTotal = ReadDecimal(pEl, "pasivoTotal");
+                        pDto.Patrimonio = ReadDecimal(pEl, "patrimonio");
+                    }
+                    return pDto;
+                }
+
+                parsed = new AnalisisMultiPeriodoDTO
+                {
+                    PeriodoActual = ReadPeriodo(root, "periodoActual"),
+                    PeriodoAnterior = ReadPeriodo(root, "periodoAnterior")
+                };
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                return BadRequest("JSON inválido en el cuerpo de la solicitud.");
             }
 
-            if (d == null || d.PeriodoActual == null || d.PeriodoAnterior == null)
+            if (parsed == null || parsed.PeriodoActual == null || parsed.PeriodoAnterior == null)
             {
-                return BadRequest("Faltan datos del período actual o anterior.");
+                return BadRequest("Faltan datos del período actual o anterior (parsing).");
             }
+
+            // Log the parsed DTO for debugging
+            try { Console.WriteLine("[AnalisisController] Parsed DTO: " + System.Text.Json.JsonSerializer.Serialize(parsed)); } catch { }
 
             // Calcular paso a paso y registrar en consola para depuración
-            var dupont = _service.CalcularDuPont(d.PeriodoActual);
-            var razones = _service.CalcularRazones(d.PeriodoActual);
-            var vertical = _service.CalcularVertical(d.PeriodoActual);
-            var horizontal = _service.CalcularHorizontal(d.PeriodoActual, d.PeriodoAnterior);
-            var flujo = _service.CalcularFlujo(d.PeriodoActual, d.PeriodoAnterior);
+            var dupont = _service.CalcularDuPont(parsed.PeriodoActual);
+            var razones = _service.CalcularRazones(parsed.PeriodoActual);
+            var vertical = _service.CalcularVertical(parsed.PeriodoActual);
+            var horizontal = _service.CalcularHorizontal(parsed.PeriodoActual, parsed.PeriodoAnterior);
+            var flujo = _service.CalcularFlujo(parsed.PeriodoActual, parsed.PeriodoAnterior);
 
             var resultado = new ResultadoAnalisisCompleto
             {
@@ -72,7 +137,7 @@ namespace SistemaFinanciero.API.Controllers
 
             try
             {
-                Console.WriteLine("[AnalisisController] Entrada: " + JsonSerializer.Serialize(d));
+                Console.WriteLine("[AnalisisController] Entrada: " + JsonSerializer.Serialize(parsed));
                 Console.WriteLine("[AnalisisController] Resultado: " + JsonSerializer.Serialize(resultado));
             }
             catch { }

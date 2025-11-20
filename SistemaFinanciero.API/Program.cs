@@ -28,6 +28,8 @@ namespace SistemaFinanciero.API
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+                    // Allow case-insensitive matching when deserializing incoming JSON
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 });
 
             // C. Configurar Swagger

@@ -53,7 +53,7 @@ namespace SistemaFinanciero.Tests
             Assert.Equal(decimal.Round(expectedApal, 8), decimal.Round(r.ApalancamientoFinanciero, 8));
             // ROE should be product
             var expectedRoe = r.MargenUtilidad * r.RotacionActivos * r.ApalancamientoFinanciero;
-            Assert.Equal(decimal.Round(expectedRoe, 12), decimal.Round(r.ROE, 12));
+            Assert.Equal(decimal.Round(expectedRoe, 12), decimal.Round(r.Roe, 12));
         }
 
         [Fact]
@@ -63,8 +63,8 @@ namespace SistemaFinanciero.Tests
             var r = _svc.CalcularRazones(a);
             Assert.InRange(r.RazonCorriente, 0.0052m, 0.006m);
             Assert.Equal(decimal.Round((a.PasivoTotal / a.ActivoTotal) * 100m, 6), decimal.Round(r.NivelEndeudamiento, 6));
-            Assert.Equal(decimal.Round((a.UtilidadNeta / a.ActivoTotal) * 100m, 6), decimal.Round(r.ROA, 6));
-            Assert.Equal(decimal.Round((a.UtilidadNeta / a.Patrimonio) * 100m, 12), decimal.Round(r.ROE, 12));
+            Assert.Equal(decimal.Round((a.UtilidadNeta / a.ActivoTotal) * 100m, 6), decimal.Round(r.Roa, 6));
+            Assert.Equal(decimal.Round((a.UtilidadNeta / a.Patrimonio) * 100m, 12), decimal.Round(r.Roe, 12));
             Assert.Equal(decimal.Round(400m, 6), decimal.Round(r.MargenNeto, 6));
         }
 

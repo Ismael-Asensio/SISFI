@@ -27,14 +27,58 @@ namespace SistemaFinanciero.API.Services
     }
 
     // --- Modelos de Resultados ---
-    public class AnalisisDuPont { public decimal MargenUtilidad, RotacionActivos, ApalancamientoFinanciero, ROE; }
-    public class ResultadosRazones { public decimal RazonCorriente, NivelEndeudamiento, ROE, ROA, MargenNeto; }
-    public class ResultadoAnalisisVertical { public decimal Pct_ActivoCorriente, Pct_Efectivo, Pct_CuentasPorCobrar, Pct_Inventario, Pct_PasivoTotal, Pct_Patrimonio; }
-    
-    public class VariacionCuenta { public string Cuenta { get; set; } public decimal ValorActual, ValorAnterior, VariacionAbsoluta, VariacionPorcentual; }
+    public class AnalisisDuPont
+    {
+        public decimal MargenUtilidad { get; set; }
+        public decimal RotacionActivos { get; set; }
+        public decimal ApalancamientoFinanciero { get; set; }
+        public decimal Roe { get; set; }
+    }
+
+    public class ResultadosRazones
+    {
+        public decimal RazonCorriente { get; set; }
+        public decimal NivelEndeudamiento { get; set; }
+        public decimal Roe { get; set; }
+        public decimal Roa { get; set; }
+        public decimal MargenNeto { get; set; }
+    }
+
+    public class ResultadoAnalisisVertical
+    {
+        public decimal Pct_ActivoCorriente { get; set; }
+        public decimal Pct_Efectivo { get; set; }
+        public decimal Pct_CuentasPorCobrar { get; set; }
+        public decimal Pct_Inventario { get; set; }
+        public decimal Pct_PasivoTotal { get; set; }
+        public decimal Pct_Patrimonio { get; set; }
+    }
+
+    public class VariacionCuenta
+    {
+        public string Cuenta { get; set; }
+        public decimal ValorActual { get; set; }
+        public decimal ValorAnterior { get; set; }
+        public decimal VariacionAbsoluta { get; set; }
+        public decimal VariacionPorcentual { get; set; }
+    }
+
     public class ResultadoAnalisisHorizontal { public List<VariacionCuenta> Variaciones { get; set; } = new List<VariacionCuenta>(); }
-    
-    public class ResultadoFlujoEfectivo { public decimal UtilidadNeta, Depreciacion, VariacionCuentasPorCobrar, VariacionInventario, VariacionCuentasPorPagar, FlujoOperativo, FlujoInversion, FlujoFinanciamiento, CambioNetoEnEfectivo, EfectivoInicial, EfectivoFinal; }
+
+    public class ResultadoFlujoEfectivo
+    {
+        public decimal UtilidadNeta { get; set; }
+        public decimal Depreciacion { get; set; }
+        public decimal VariacionCuentasPorCobrar { get; set; }
+        public decimal VariacionInventario { get; set; }
+        public decimal VariacionCuentasPorPagar { get; set; }
+        public decimal FlujoOperativo { get; set; }
+        public decimal FlujoInversion { get; set; }
+        public decimal FlujoFinanciamiento { get; set; }
+        public decimal CambioNetoEnEfectivo { get; set; }
+        public decimal EfectivoInicial { get; set; }
+        public decimal EfectivoFinal { get; set; }
+    }
 
     public class ResultadoAnalisisCompleto
     {
@@ -63,7 +107,7 @@ namespace SistemaFinanciero.API.Services
             r.MargenUtilidad = margen * 100m;
             r.RotacionActivos = rotacion;
             r.ApalancamientoFinanciero = apalanc;
-            r.ROE = (margen * rotacion * apalanc) * 100m;
+            r.Roe = (margen * rotacion * apalanc) * 100m;
             return r;
         }
 
@@ -71,8 +115,8 @@ namespace SistemaFinanciero.API.Services
         {
             var r = new ResultadosRazones();
             if (d.PasivoCorriente > 0) r.RazonCorriente = d.ActivoCorriente / d.PasivoCorriente;
-            if (d.ActivoTotal > 0) { r.NivelEndeudamiento = (d.PasivoTotal / d.ActivoTotal) * 100m; r.ROA = (d.UtilidadNeta / d.ActivoTotal) * 100m; }
-            if (d.Patrimonio > 0) r.ROE = (d.UtilidadNeta / d.Patrimonio) * 100m;
+            if (d.ActivoTotal > 0) { r.NivelEndeudamiento = (d.PasivoTotal / d.ActivoTotal) * 100m; r.Roa = (d.UtilidadNeta / d.ActivoTotal) * 100m; }
+            if (d.Patrimonio > 0) r.Roe = (d.UtilidadNeta / d.Patrimonio) * 100m;
             if (d.Ventas > 0) r.MargenNeto = (d.UtilidadNeta / d.Ventas) * 100m;
             return r;
         }
