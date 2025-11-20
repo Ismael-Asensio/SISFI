@@ -3,10 +3,12 @@ import React from 'react';
 const AnalisisVertical = ({ datos }) => {
   if (!datos) return null;
 
-  const fmt = (val) => {
-    const n = Number(val ?? 0);
-    return `${Number.isFinite(n) ? n.toFixed(2) : '0.00'}%`;
+  const toNumber = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
   };
+
+  const fmt = (val, decimals = 2) => `${toNumber(val).toLocaleString('es-NI', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}%`;
 
   return (
     <div className="card">

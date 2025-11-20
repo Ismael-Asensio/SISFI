@@ -12,8 +12,15 @@ const Dashboard = ({ datos }) => {
     return Number.isFinite(n) ? n : 0;
   };
 
-  const fmtNum = (v, decimals = 2) => toNumber(v).toFixed(decimals);
-  const fmtPct = (v, decimals = 2) => `${toNumber(v).toFixed(decimals)}%`;
+  const fmtNum = (v, decimals = 2) => {
+    const n = toNumber(v);
+    return n.toLocaleString('es-NI', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  };
+
+  const fmtPct = (v, decimals = 2) => {
+    const n = toNumber(v);
+    return `${n.toLocaleString('es-NI', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}%`;
+  };
 
   const margen = toNumber(datos.margenUtilidad) * 100;
   const rotacion = toNumber(datos.rotacionActivos);

@@ -3,9 +3,20 @@ import React from 'react';
 const AnalisisHorizontal = ({ datos }) => {
   if (!datos || !datos.variaciones) return null;
 
-  const safe = (v) => (v ?? 0);
-  const fmtNum = (val) => new Intl.NumberFormat('es-NI', { style: 'currency', currency: 'NIO' }).format(safe(val));
-  const fmtPct = (val) => `${Number(safe(val)).toFixed(2)}%`;
+  const toNumber = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const fmtNum = (val) => {
+    const n = toNumber(val);
+    return new Intl.NumberFormat('es-NI', { style: 'currency', currency: 'NIO' }).format(n);
+  };
+
+  const fmtPct = (val, decimals = 2) => {
+    const n = toNumber(val);
+    return `${n.toLocaleString('es-NI', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}%`;
+  };
 
   return (
     <div className="card">

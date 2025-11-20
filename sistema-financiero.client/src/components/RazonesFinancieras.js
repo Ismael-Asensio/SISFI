@@ -8,8 +8,15 @@ const RazonesFinancieras = ({ datos }) => {
     return Number.isFinite(n) ? n : 0;
   };
 
-  const fmtNum = (val, decimals = 2) => toNumber(val).toFixed(decimals);
-  const fmtPct = (val, decimals = 2) => `${toNumber(val * 100).toFixed(decimals)}%`;
+  const fmtNum = (val, decimals = 2) => {
+    const n = toNumber(val);
+    return n.toLocaleString('es-NI', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  };
+
+  const fmtPct = (val, decimals = 2) => {
+    const n = toNumber(val * 100);
+    return `${n.toLocaleString('es-NI', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}%`;
+  };
 
   return (
     <div className="card">
