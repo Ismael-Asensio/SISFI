@@ -23,8 +23,12 @@ namespace SistemaFinanciero.API
                                   });
             });
 
-            // B. Agregar Controladores
-            builder.Services.AddControllers();
+            // B. Agregar Controladores y forzar serialización JSON en camelCase
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+                });
 
             // C. Configurar Swagger
             builder.Services.AddEndpointsApiExplorer();

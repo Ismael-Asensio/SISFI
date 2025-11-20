@@ -3,10 +3,12 @@ import React from 'react';
 const FlujoDeEfectivo = ({ datos }) => {
   if (!datos) return null;
 
-  const fmt = (val) => {
-    const n = Number(val ?? 0);
-    return new Intl.NumberFormat('es-NI', { style: 'currency', currency: 'NIO' }).format(Number.isFinite(n) ? n : 0);
+  const toNumber = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
   };
+
+  const fmt = (val) => new Intl.NumberFormat('es-NI', { style: 'currency', currency: 'NIO' }).format(toNumber(val));
 
   const Fila = ({ label, valor, bold = false, color = 'inherit' }) => (
     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px dashed #eee', fontWeight: bold ? 'bold' : 'normal', color }}>
