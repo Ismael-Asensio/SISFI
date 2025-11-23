@@ -36,9 +36,19 @@ const RazonesFinancieras = ({ datos }) => {
             <td>Capacidad pago corto plazo</td>
           </tr>
           <tr>
+            <td>Razón Rápida (Acid Test)</td>
+            <td className="text-bold">{fmtNum(datos.rapida)}</td>
+            <td>Activos líquidos excluyendo inventario</td>
+          </tr>
+          <tr>
             <td>Nivel Endeudamiento</td>
             <td className="text-bold">{fmtPct(datos.nivelEndeudamiento)}</td>
             <td>% Activos financiados por deuda</td>
+          </tr>
+          <tr>
+            <td>Pasivo / Capital</td>
+            <td className="text-bold">{fmtNum(datos.pasivoSobreCapital)}</td>
+            <td>Proporción deuda vs patrimonio</td>
           </tr>
           <tr>
             <td>ROE (Rentabilidad Patrimonio)</td>
@@ -54,6 +64,36 @@ const RazonesFinancieras = ({ datos }) => {
             <td>Margen Neto</td>
             <td className="text-bold">{fmtPct(datos.margenNeto)}</td>
             <td>Ganancia por cada $ vendido</td>
+          </tr>
+          <tr>
+            <td>Rotación de Inventarios</td>
+            <td className="text-bold">{fmtNum(datos.rotacionInventarios)}x</td>
+            <td>Eficiencia en venta/reposición de inventarios</td>
+          </tr>
+          <tr>
+            <td>Rotación Cuentas por Cobrar</td>
+            <td className="text-bold">{fmtNum(datos.rotacionCuentasPorCobrar)}x</td>
+            <td>Eficacia de cobros</td>
+          </tr>
+          <tr>
+            <td>Periodo Promedio de Cobro</td>
+            <td className="text-bold">{fmtNum(datos.periodoPromedioCobro, 1)} días</td>
+            <td>Tiempo promedio de cobro</td>
+          </tr>
+          <tr>
+            <td>Rotación Activos Fijos</td>
+            <td className="text-bold">{fmtNum(datos.rotacionActivosFijos)}x</td>
+            <td>Eficiencia uso activos fijos</td>
+          </tr>
+          <tr>
+            <td>Rotación Activos Totales</td>
+            <td className="text-bold">{fmtNum(datos.rotacionActivosTotales)}x</td>
+            <td>Eficiencia uso de activos totales</td>
+          </tr>
+          <tr>
+            <td>Cobertura de Intereses</td>
+            <td className="text-bold">{fmtNum(datos.coberturaIntereses)}x</td>
+            <td>Capacidad para pagar intereses</td>
           </tr>
         </tbody>
       </table>

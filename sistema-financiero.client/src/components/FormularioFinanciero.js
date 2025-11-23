@@ -16,6 +16,11 @@ const FormularioFinanciero = ({ formData, onChange, onSubmit, loading }) => {
     { id: 'activoTotal', label: 'Total Activo' },
     { id: 'pasivoTotal', label: 'Total Pasivo' },
     { id: 'patrimonio', label: 'Total Patrimonio' },
+    // Optional fields for extended ratios
+    { id: 'costoBienesVendidos', label: 'Costo de Bienes Vendidos (COGS)', optional: true },
+    { id: 'ventasCredito', label: 'Ventas a Crédito (opcional)', optional: true },
+    { id: 'utilidadOperativa', label: 'Utilidad Operativa (opcional)', optional: true },
+    { id: 'gastoIntereses', label: 'Gasto por Intereses (opcional)', optional: true },
   ];
 
   const renderInputs = (periodo) => (
@@ -34,8 +39,8 @@ const FormularioFinanciero = ({ formData, onChange, onSubmit, loading }) => {
             style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
             value={formData[periodo][campo.id]}
             onChange={(e) => onChange(periodo, campo.id, e.target.value)}
-            placeholder="0.00"
-            required
+            placeholder={campo.optional ? 'Opcional' : '0.00'}
+            required={!campo.optional}
           />
         </div>
       ))}

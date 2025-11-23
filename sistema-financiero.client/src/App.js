@@ -18,7 +18,9 @@ const App = () => {
     ventas: '', utilidadNeta: '', depreciacion: '', efectivo: '',
     cuentasPorCobrar: '', inventario: '', activoCorriente: '',
     cuentasPorPagar: '', pasivoCorriente: '', activoTotal: '',
-    pasivoTotal: '', patrimonio: ''
+    pasivoTotal: '', patrimonio: '',
+    // optional inputs supported by API
+    costoBienesVendidos: '', ventasCredito: '', utilidadOperativa: '', gastoIntereses: ''
   };
 
   const [formData, setFormData] = useState({
