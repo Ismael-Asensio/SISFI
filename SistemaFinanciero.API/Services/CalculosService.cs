@@ -18,6 +18,11 @@ namespace SistemaFinanciero.API.Services
         public decimal ActivoTotal { get; set; }
         public decimal PasivoTotal { get; set; }
         public decimal Patrimonio { get; set; }
+        // Optional inputs that improve ratio calculations when provided
+        public decimal CostoBienesVendidos { get; set; }
+        public decimal VentasCredito { get; set; }
+        public decimal UtilidadOperativa { get; set; }
+        public decimal GastoIntereses { get; set; }
     }
 
     public class AnalisisMultiPeriodoDTO
@@ -42,6 +47,15 @@ namespace SistemaFinanciero.API.Services
         public decimal Roe { get; set; }
         public decimal Roa { get; set; }
         public decimal MargenNeto { get; set; }
+        // Additional ratios
+        public decimal Rapida { get; set; }
+        public decimal RotacionInventarios { get; set; }
+        public decimal RotacionCuentasPorCobrar { get; set; }
+        public decimal PeriodoPromedioCobro { get; set; }
+        public decimal RotacionActivosFijos { get; set; }
+        public decimal RotacionActivosTotales { get; set; }
+        public decimal PasivoSobreCapital { get; set; }
+        public decimal CoberturaIntereses { get; set; }
     }
 
     public class ResultadoAnalisisVertical
@@ -111,13 +125,60 @@ namespace SistemaFinanciero.API.Services
             return r;
         }
 
-        public ResultadosRazones CalcularRazones(DatosPeriodoDTO d)
+        // Compute liquidity, activity, leverage and profitability ratios.
+        // If 'ant' (previous period) is provided, averages will be used where appropriate
+        public ResultadosRazones CalcularRazones(DatosPeriodoDTO d, DatosPeriodoDTO ant = null)
         {
             var r = new ResultadosRazones();
+            // Liquidity
             if (d.PasivoCorriente > 0) r.RazonCorriente = d.ActivoCorriente / d.PasivoCorriente;
+            // Quick ratio (acid test)
+            if (d.PasivoCorriente > 0) r.Rapida = (d.ActivoCorriente - d.Inventario) / d.PasivoCorriente;
+
+            // Leverage & profitability
             if (d.ActivoTotal > 0) { r.NivelEndeudamiento = (d.PasivoTotal / d.ActivoTotal) * 100m; r.Roa = (d.UtilidadNeta / d.ActivoTotal) * 100m; }
             if (d.Patrimonio > 0) r.Roe = (d.UtilidadNeta / d.Patrimonio) * 100m;
             if (d.Ventas > 0) r.MargenNeto = (d.UtilidadNeta / d.Ventas) * 100m;
+
+            // Pasivo / Capital
+            if (d.Patrimonio > 0) r.PasivoSobreCapital = d.PasivoTotal / d.Patrimonio;
+
+            // Activity ratios that can use previous period averages when provided
+            // Inventory turnover = COGS / Average Inventory. If COGS not provided, fall back to Sales.
+            decimal cogs = d.CostoBienesVendidos;
+            if (cogs <= 0) cogs = d.Ventas; // fallback
+            if (ant != null)
+            {
+                var avgInv = (d.Inventario + ant.Inventario) / 2m;
+                if (avgInv > 0) r.RotacionInventarios = cogs / avgInv;
+
+                // Receivables turnover: use VentasCredito if present, else Ventas
+                var ventasCred = d.VentasCredito > 0 ? d.VentasCredito : d.Ventas;
+                var avgCxc = (d.CuentasPorCobrar + ant.CuentasPorCobrar) / 2m;
+                if (avgCxc > 0) r.RotacionCuentasPorCobrar = ventasCred / avgCxc;
+                if (r.RotacionCuentasPorCobrar > 0) r.PeriodoPromedioCobro = 360m / r.RotacionCuentasPorCobrar;
+
+                // Fixed assets turnover: sales / average fixed assets. Compute fixed assets = activoTotal - activoCorriente
+                var actFijosAct = d.ActivoTotal - d.ActivoCorriente;
+                var actFijosAnt = ant.ActivoTotal - ant.ActivoCorriente;
+                var avgActFijos = (actFijosAct + actFijosAnt) / 2m;
+                if (avgActFijos > 0) r.RotacionActivosFijos = d.Ventas / avgActFijos;
+
+                // Total asset turnover: sales / average total assets
+                var avgActTotal = (d.ActivoTotal + ant.ActivoTotal) / 2m;
+                if (avgActTotal > 0) r.RotacionActivosTotales = d.Ventas / avgActTotal;
+            }
+            else
+            {
+                // Without previous period we compute simple versions where possible
+                if (d.Inventario > 0) r.RotacionInventarios = (cogs > 0 && d.Inventario > 0) ? (cogs / d.Inventario) : 0m;
+                if (d.CuentasPorCobrar > 0) { var ventasCred = d.VentasCredito > 0 ? d.VentasCredito : d.Ventas; if (ventasCred > 0) r.RotacionCuentasPorCobrar = ventasCred / d.CuentasPorCobrar; if (r.RotacionCuentasPorCobrar > 0) r.PeriodoPromedioCobro = 360m / r.RotacionCuentasPorCobrar; }
+                var actFijos = d.ActivoTotal - d.ActivoCorriente; if (actFijos > 0) r.RotacionActivosFijos = d.Ventas / actFijos;
+                if (d.ActivoTotal > 0) r.RotacionActivosTotales = d.Ventas / d.ActivoTotal;
+            }
+
+            // Interest coverage (operating profit / interest expense) if data present
+            if (d.GastoIntereses > 0 && d.UtilidadOperativa > 0) r.CoberturaIntereses = d.UtilidadOperativa / d.GastoIntereses;
             return r;
         }
 

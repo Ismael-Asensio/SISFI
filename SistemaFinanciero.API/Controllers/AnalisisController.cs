@@ -96,6 +96,11 @@ namespace SistemaFinanciero.API.Controllers
                         pDto.ActivoTotal = ReadDecimal(pEl, "activoTotal");
                         pDto.PasivoTotal = ReadDecimal(pEl, "pasivoTotal");
                         pDto.Patrimonio = ReadDecimal(pEl, "patrimonio");
+                        // Optional fields
+                        pDto.CostoBienesVendidos = ReadDecimal(pEl, "costoBienesVendidos");
+                        pDto.VentasCredito = ReadDecimal(pEl, "ventasCredito");
+                        pDto.UtilidadOperativa = ReadDecimal(pEl, "utilidadOperativa");
+                        pDto.GastoIntereses = ReadDecimal(pEl, "gastoIntereses");
                     }
                     return pDto;
                 }
@@ -121,7 +126,7 @@ namespace SistemaFinanciero.API.Controllers
 
             // Calcular paso a paso y registrar en consola para depuración
             var dupont = _service.CalcularDuPont(parsed.PeriodoActual);
-            var razones = _service.CalcularRazones(parsed.PeriodoActual);
+            var razones = _service.CalcularRazones(parsed.PeriodoActual, parsed.PeriodoAnterior);
             var vertical = _service.CalcularVertical(parsed.PeriodoActual);
             var horizontal = _service.CalcularHorizontal(parsed.PeriodoActual, parsed.PeriodoAnterior);
             var flujo = _service.CalcularFlujo(parsed.PeriodoActual, parsed.PeriodoAnterior);
