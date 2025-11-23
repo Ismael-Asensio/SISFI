@@ -1,0 +1,18 @@
+Compilando...
+Starting SistemaFinanciero.API on: http://localhost:5272
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5272
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\ismaa\OneDrive\Escritorio\ProyectoFinancieroMIPYMES\SistemaFinanciero.API
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+[AnalisisController] Parsed DTO: {"PeriodoActual":{"Ventas":100000,"UtilidadNeta":8000,"Depreciacion":500,"Efectivo":12000,"CuentasPorCobrar":8000,"Inventario":15000,"ActivoCorriente":40000,"CuentasPorPagar":3000,"PasivoCorriente":15000,"ActivoTotal":120000,"PasivoTotal":70000,"Patrimonio":50000},"PeriodoAnterior":{"Ventas":90000,"UtilidadNeta":7000,"Depreciacion":450,"Efectivo":10000,"CuentasPorCobrar":7500,"Inventario":14000,"ActivoCorriente":38000,"CuentasPorPagar":2800,"PasivoCorriente":14000,"ActivoTotal":110000,"PasivoTotal":65000,"Patrimonio":45000}}
+[AnalisisController] Entrada: {"PeriodoActual":{"Ventas":100000,"UtilidadNeta":8000,"Depreciacion":500,"Efectivo":12000,"CuentasPorCobrar":8000,"Inventario":15000,"ActivoCorriente":40000,"CuentasPorPagar":3000,"PasivoCorriente":15000,"ActivoTotal":120000,"PasivoTotal":70000,"Patrimonio":50000},"PeriodoAnterior":{"Ventas":90000,"UtilidadNeta":7000,"Depreciacion":450,"Efectivo":10000,"CuentasPorCobrar":7500,"Inventario":14000,"ActivoCorriente":38000,"CuentasPorPagar":2800,"PasivoCorriente":14000,"ActivoTotal":110000,"PasivoTotal":65000,"Patrimonio":45000}}
+[AnalisisController] Resultado: {"DuPont":{},"Razones":{},"Vertical":{},"Horizontal":{"Variaciones":[{"Cuenta":"Ventas"},{"Cuenta":"Utilidad Neta"},{"Cuenta":"Activo Total"},{"Cuenta":"Pasivo Total"},{"Cuenta":"Patrimonio"}]},"FlujoEfectivo":{}}
+[AnalisisController] Parsed DTO: {"PeriodoActual":{"Ventas":100000,"UtilidadNeta":8000,"Depreciacion":500,"Efectivo":12000,"CuentasPorCobrar":8000,"Inventario":15000,"ActivoCorriente":40000,"CuentasPorPagar":3000,"PasivoCorriente":15000,"ActivoTotal":120000,"PasivoTotal":70000,"Patrimonio":50000},"PeriodoAnterior":{"Ventas":90000,"UtilidadNeta":7000,"Depreciacion":450,"Efectivo":10000,"CuentasPorCobrar":7500,"Inventario":14000,"ActivoCorriente":38000,"CuentasPorPagar":2800,"PasivoCorriente":14000,"ActivoTotal":110000,"PasivoTotal":65000,"Patrimonio":45000}}
+[AnalisisController] Entrada: {"PeriodoActual":{"Ventas":100000,"UtilidadNeta":8000,"Depreciacion":500,"Efectivo":12000,"CuentasPorCobrar":8000,"Inventario":15000,"ActivoCorriente":40000,"CuentasPorPagar":3000,"PasivoCorriente":15000,"ActivoTotal":120000,"PasivoTotal":70000,"Patrimonio":50000},"PeriodoAnterior":{"Ventas":90000,"UtilidadNeta":7000,"Depreciacion":450,"Efectivo":10000,"CuentasPorCobrar":7500,"Inventario":14000,"ActivoCorriente":38000,"CuentasPorPagar":2800,"PasivoCorriente":14000,"ActivoTotal":110000,"PasivoTotal":65000,"Patrimonio":45000}}
+[AnalisisController] Resultado: {"DuPont":{},"Razones":{},"Vertical":{},"Horizontal":{"Variaciones":[{"Cuenta":"Ventas"},{"Cuenta":"Utilidad Neta"},{"Cuenta":"Activo Total"},{"Cuenta":"Pasivo Total"},{"Cuenta":"Patrimonio"}]},"FlujoEfectivo":{}}
